@@ -7,7 +7,7 @@ GitHub repository:
 
 ## Requirements
 
-- PHP 8.3 or newer
+- PHP 8.4 or newer
 - Composer
 - MySQL database
 - PHP extensions: `openssl`, `pdo_mysql`, `mbstring`, `fileinfo`, `curl`, `zip`
@@ -18,7 +18,7 @@ GitHub repository:
 2. Set PHP version to PHP 8.3 or newer.
 3. Create a MySQL database and database user.
 4. Deploy the GitHub repository into the website root.
-5. If the Laravel project files are placed directly in `public_html`, copy `hostinger-root.htaccess` to `.htaccess` in `public_html`.
+5. If Hostinger serves the project root instead of Laravel's `public` folder, copy `hostinger-root-index.php` to `index.php`, copy `hostinger-root.htaccess` to `.htaccess`, and copy the contents of `public/` (including `assets/`) into that served directory.
 6. Create a production `.env` file on Hostinger. Do not upload the local `.env`.
 
 ## Production `.env` Values
@@ -62,7 +62,7 @@ composer install --no-dev --optimize-autoloader
 
 ## Folder Notes
 
-For shared hosting, Laravel should keep using its `public` folder as the web entry point. If Hostinger does not let you point the domain document root to `public`, keep the full app in `public_html` and use the `.htaccess` rewrite from `hostinger-root.htaccess`.
+For shared hosting, Laravel should ideally use its `public` folder as the web entry point. If Hostinger only serves the project root, the tracked root entry files above provide the compatible layout while keeping `app/`, `config/`, `routes/`, `storage/`, and `vendor/` outside the public web path.
 
 Do not upload these local-only files:
 
