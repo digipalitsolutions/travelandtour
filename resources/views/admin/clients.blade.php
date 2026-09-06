@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clients | {{ config('app.name', 'Aethereal Luxury Travel') }}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+</head>
+<body class="bg-[#f8f9ff] text-[#0d1c2e] antialiased">
+    <div class="min-h-screen lg:grid lg:grid-cols-[280px_1fr]">
+        <aside class="flex flex-col border-r border-slate-200 bg-white p-5 lg:min-h-screen">
+            <a href="{{ route('home') }}" class="flex items-center gap-3">
+                <img src="{{ asset('assets/images/abc_travel_agency_logo.png') }}" alt="Aethereal Luxury Travel logo" class="h-14 w-36 rounded-lg object-contain">
+            </a>
+            <nav class="mt-8 space-y-6 text-sm">
+                <div>
+                    <p class="mb-2 px-3 text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Overview</p>
+                    <a href="{{ route('home') }}" class="flex rounded-lg px-3 py-2 font-semibold text-slate-600 hover:bg-slate-50">Home</a>
+                </div>
+                <div>
+                    <p class="mb-2 px-3 text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Operations</p>
+                    <a href="{{ route('admin.tour-packages') }}" class="flex rounded-lg px-3 py-2 font-semibold text-slate-600 hover:bg-slate-50">Tour Packages</a>
+                    <a href="{{ route('admin.bookings') }}" class="mt-1 flex rounded-lg px-3 py-2 font-semibold text-slate-600 hover:bg-slate-50">Bookings</a>
+                    <a href="{{ route('admin.clients') }}" aria-current="page" class="mt-1 flex rounded-lg bg-[#d5e3fc] px-3 py-2 font-bold text-[#0a2540]">Clients</a>
+                </div>
+            </nav>
+            <div class="mt-auto pt-8">
+                <form method="POST" action="{{ route('admin.logout') }}">
+                    @csrf
+                    <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-slate-200 px-4 py-3 text-sm font-bold text-slate-600 hover:bg-slate-50">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <main class="px-4 py-8 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <p class="text-xs font-bold uppercase tracking-[0.22em] text-[#006b5f]">Registered guests</p>
+                <h1 class="font-display mt-2 text-4xl font-extrabold text-[#0a2540]">Client Management</h1>
+                <p class="mt-2 text-sm text-slate-600">Guests are automatically registered here after confirming a booking.</p>
+            </div>
+
+            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_12px_24px_-18px_rgba(10,37,64,0.35)]">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+                        <thead class="bg-[#eff4ff] text-xs uppercase tracking-[0.12em] text-slate-500">
+                            <tr>
+                                <th class="px-5 py-4">Client</th>
+                                <th class="px-5 py-4">Contact</th>
+                                <th class="px-5 py-4">Package</th>
+                                <th class="px-5 py-4">Payment</th>
+                                <th class="px-5 py-4">Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            @forelse ($bookings as $booking)
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-5 py-4">
+                                        <p class="font-display font-bold text-[#0a2540]">{{ $booking['guest_name'] }}</p>
+                                        <p class="text-xs text-slate-500">{{ $booking['guest_nationality'] }}</p>
+                                    </td>
+                                    <td class="px-5 py-4 text-slate-600">
+                                        <p>{{ $booking['guest_email'] }}</p>
+                                        <p class="text-xs">{{ $booking['guest_phone'] }}</p>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <p class="font-bold text-[#0a2540]">{{ $booking['tour_title'] }}</p>
+                                        <p class="text-xs text-slate-500">{{ $booking['tour_place'] }}</p>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <span class="rounded-full bg-[#76f4e0]/30 px-3 py-1 text-xs font-bold text-[#006b5f]">{{ ucwords(str_replace('-', ' ', $booking['payment_method'])) }}</span>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <a href="{{ route('booking.details', $booking['reference']) }}" class="font-bold text-[#006b5f]">{{ $booking['reference'] }}</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-5 py-10 text-center text-sm font-semibold text-slate-500">No clients registered yet.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
