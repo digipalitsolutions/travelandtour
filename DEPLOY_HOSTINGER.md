@@ -43,6 +43,33 @@ ADMIN_EMAIL=arnelmarquez1123@gmail.com
 ADMIN_PASSWORD="Ppg12345678#"
 ```
 
+## Working Deployment Layout
+
+This domain's FTP root is the directory Hostinger serves directly. Use this layout when deploying to `travelandtour.digipalitsolutions.com`:
+
+1. Upload the Laravel application folders (`app`, `bootstrap`, `config`, `resources`, `routes`, `storage`, and `vendor`) to the FTP root.
+2. Copy `hostinger-root-index.php` to `index.php` in that same root.
+3. Copy `hostinger-root.htaccess` to `.htaccess` in that same root.
+4. Copy the contents of the Laravel `public/` directory, especially `assets/`, into the FTP root.
+5. Use PHP 8.4 or newer and ensure `storage/` and `bootstrap/cache/` are writable.
+
+### Important `.env` Rule
+
+Use standard quotes only. Do not escape them with backslashes. This is valid:
+
+```env
+APP_NAME="Aethereal Luxury Travel"
+ADMIN_PASSWORD="your-password"
+```
+
+This is invalid and prevents Laravel from booting:
+
+```env
+APP_NAME=\"Aethereal Luxury Travel\"
+```
+
+When the `.env` file has escaped quotes, Laravel fails during environment loading and Hostinger displays a blank HTTP 500 page before Laravel can write its normal error log.
+
 After creating `.env`, run:
 
 ```bash
